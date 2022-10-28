@@ -37,8 +37,9 @@ schema_view = get_schema_view(
 urlpatterns = [
     path("admin/", admin.site.urls),
     path('__debug__/', include('debug_toolbar.urls')),
-    path("accounts/", include('accounts.urls')),
-    path("", include('learn.urls')),
+    path("accounts/", include('core.urls')),
+    path("learn/", include('learn.urls')),
+    path("info/", include('info_hub.urls')),
 
     re_path(r'^docs/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     re_path(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),

@@ -1,13 +1,11 @@
-from collections import OrderedDict
-from rest_framework.generics import CreateAPIView, ListCreateAPIView
-from rest_framework.viewsets import ModelViewSet
-from rest_framework.response import Response
-from rest_framework import status
+
+from core.models import UserCourse
 from rest_framework.decorators import action
-from accounts.models import UserCourse
-from .serializers import *
+from rest_framework.response import Response
+from rest_framework.viewsets import ModelViewSet
+
 from .models import *
-from rest_framework.views import APIView
+from .serializers import *
 
 
 class TaskViewSet (ModelViewSet):
@@ -80,8 +78,9 @@ class TaskViewSet (ModelViewSet):
 
 
 class AnswerTaskViewSet (ModelViewSet):
-    http_method_names = ["post","get", "head", "options"] # Answers cannot be edited or updated or deleted
+    # http_method_names = ['post'] # Answers cannot be edited or updated or deleted
     serializer_class = AnswerTaskSerializer
+    http_method_names = ['post']
 
     def get_queryset(self):
         if self.request.user.is_mentor :
@@ -96,9 +95,6 @@ class AnswerTaskViewSet (ModelViewSet):
         return context
 
     
-
-
-
 class GradeViewSet (ModelViewSet):
     queryset = Grade.objects.all()
     serializer_class = GradeSerializer

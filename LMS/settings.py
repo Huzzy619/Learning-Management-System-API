@@ -33,10 +33,13 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
 
-    "accounts",
+    "core",
     "learn",
+    "info_hub",
+    "likes",
 
     'jazzmin',
+    "hitcount", # Count number of views per post
     
 
     'rest_framework',
@@ -114,7 +117,7 @@ WSGI_APPLICATION = "LMS.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "NAME": BASE_DIR / "LMS.sqlite3",
     }
 }
 
@@ -168,7 +171,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-AUTH_USER_MODEL = 'accounts.User'
+AUTH_USER_MODEL = 'core.User'
 
 REST_USE_JWT = True
 
@@ -185,6 +188,10 @@ REST_FRAMEWORK = {
     ),
     'COERCE_DECIMAL_TO_STRING': False,
 
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ]
+
 }
 
 SIMPLE_JWT = {
@@ -197,5 +204,7 @@ SIMPLE_JWT = {
 }
 
 REST_AUTH_SERIALIZERS = {
-    'LOGIN_SERIALIZER': 'accounts.serializers.CustomLoginSerializer',
+    'LOGIN_SERIALIZER': 'core.serializers.CustomLoginSerializer',
 }
+
+HITCOUNT_HITS_PER_IP_LIMIT = 1
