@@ -35,7 +35,6 @@ class Task (models.Model):
     created_on  = models.DateTimeField(auto_now_add = True)
     course = models.ForeignKey(Course, on_delete = models.DO_NOTHING)
     mode_of_submission = models.CharField(max_length = 50, choices = SUBMISSION)
-
     
 
     created_by = models.ForeignKey(User, on_delete = models.DO_NOTHING)

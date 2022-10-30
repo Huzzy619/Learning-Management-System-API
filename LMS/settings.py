@@ -12,7 +12,8 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from pathlib import Path
 from datetime import timedelta
-
+# from celery.beat import crontab
+from decouple import config
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -37,6 +38,7 @@ INSTALLED_APPS = [
     "learn",
     "info_hub",
     "likes",
+    "playground",
 
     'jazzmin',
     "hitcount", # Count number of views per post
@@ -95,7 +97,7 @@ ROOT_URLCONF = "LMS.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [BASE_DIR/'templates'],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -141,6 +143,30 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 SITE_ID = 1
+
+# Provider specific settings
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        # For each OAuth based provider, either add a ``SocialApp``
+        # (``socialaccount`` app) containing the required client
+        # credentials, or list them here:
+        'APP': {
+            'client_id': '878674025478-e8s4rf34md8h4n7qobb6mog43nfhfb7r.apps.googleusercontent.com',
+            'secret': config('SECRET'),
+            'key': ''
+        },
+
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        },
+    }
+}
+
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
@@ -163,6 +189,11 @@ INTERNAL_IPS = [
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = "static/"
+
+STATICFILES_DIRS = [
+
+    BASE_DIR / "static",
+]
 
 MEDIA_URL = "media/"
 MEDIA_ROOT = BASE_DIR / 'media'
@@ -189,7 +220,7 @@ REST_FRAMEWORK = {
     'COERCE_DECIMAL_TO_STRING': False,
 
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',
+        # 'rest_framework.permissions.IsAuthenticated',
     ]
 
 }
@@ -208,3 +239,23 @@ REST_AUTH_SERIALIZERS = {
 }
 
 HITCOUNT_HITS_PER_IP_LIMIT = 1
+
+
+EMAIL_USER = ""
+EMAIL_PASSWORD = ""
+EMAIL_HOST = "localhost"
+EMAIL_PORT = 2525
+
+
+CELERY_BROKER_URL = 'redis://localhost:6379/1'
+
+CELERY_BEAT_SCHEDULE = {
+
+    'notify_customers':{
+        'task':'learn.tasks.notify_users',
+        'schedule': 5,
+        'args':['HELLO World']
+
+    
+    }
+}

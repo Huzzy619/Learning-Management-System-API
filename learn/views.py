@@ -3,10 +3,11 @@ from core.models import UserCourse
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
+from rest_framework import permissions
 
 from .models import *
 from .serializers import *
-
+from .permissions import IsMentor
 
 class TaskViewSet (ModelViewSet):
     serializer_class = TaskSerializer
@@ -70,11 +71,16 @@ class TaskViewSet (ModelViewSet):
             "number_of_courses": user_courses.count(),
             # "number_of_task_attempted": user_answers.count()
             }
-            )
+        )
 
     def get_serializer_context(self):
         # had to pass total as None to avoid Key erorr in the serializer
         return {'user': self.request.user}
+    
+    def get_permissions(self):
+        if not self.request.method in permissions.SAFE_METHODS:
+            return [IsMentor()]
+        return [permissions.IsAuthenticated()]
 
 
 class AnswerTaskViewSet (ModelViewSet):
@@ -101,3 +107,8 @@ class GradeViewSet (ModelViewSet):
 
     def get_serializer_context(self):
         return {'answer_pk': self.kwargs['answer_pk'], 'request': self.request}
+
+    def get_permissions(self):
+        if not self.request.method in permissions.SAFE_METHODS:
+            return [IsMentor()]
+

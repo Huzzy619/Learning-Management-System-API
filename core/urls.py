@@ -1,7 +1,7 @@
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 from rest_framework_nested.routers import NestedDefaultRouter
-
+from .social_view import GoogleLogin
 from .views import *
 
 router = DefaultRouter()
@@ -26,9 +26,10 @@ urlpatterns = [
 
     path("", include('dj_rest_auth.urls')),
     path("registration/students/", include('dj_rest_auth.registration.urls')),
-    path("registration/mentor", MentorRegisterView.as_view())
+    path("registration/mentor", MentorRegisterView.as_view()),
     # path("picture", ImageVie, name = "profile_pic")
 
+    path('google/login', GoogleLogin.as_view(), name='google-rest')
 
 ]
 

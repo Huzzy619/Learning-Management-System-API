@@ -4,7 +4,7 @@ from dj_rest_auth.registration.views import RegisterView
 
 
 from .models import *
-from .serializers import *
+from .serializers import * 
 
 
 class MentorRegisterView(RegisterView):
