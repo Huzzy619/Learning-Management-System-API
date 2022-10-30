@@ -7,5 +7,4 @@ class LearnConfig(AppConfig):
 
 
     def ready(self) -> None:
-        # import learn.signals.handlers 
-        pass
+        import learn.signals.handlers 

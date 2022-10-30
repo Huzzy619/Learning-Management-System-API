@@ -8,11 +8,15 @@ from dj_rest_auth.registration.views import SocialLoginView
 
 
 class CustomSocialLoginView(SocialLoginView):
+    """
+    Login with google
+    """
     serializer_class = CustomSocialLoginSerializer
 
 
 # if you want to use Authorization Code Grant, use this
 class GoogleLogin(CustomSocialLoginView):
+    
     adapter_class = GoogleOAuth2Adapter
     # CALLBACK_URL_YOU_SET_ON_GOOGLE
     callback_url = 'http://127.0.0.1:8000/accounts/google/login/callback/'

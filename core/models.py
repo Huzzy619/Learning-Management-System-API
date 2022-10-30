@@ -99,6 +99,3 @@ class Info (models.Model):
     disabiliies = models.CharField(max_length=500, blank=True, null=True)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
-class UserCourse (models.Model):
-    course = models.ForeignKey(Course, on_delete = models.CASCADE)
-    user = models.ForeignKey(User, on_delete = models.CASCADE, related_name = 'usercourse')

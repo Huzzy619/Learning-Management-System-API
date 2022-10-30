@@ -7,7 +7,6 @@ from .views import *
 router = DefaultRouter()
 
 router.register("profile", ProfileViewSet, basename="profile")
-router.register("course", CourseEnrollViewSet)
 
 nested_router = NestedDefaultRouter(router, "profile", lookup="user")
 

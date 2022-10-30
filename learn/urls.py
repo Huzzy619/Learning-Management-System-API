@@ -6,12 +6,14 @@ from .views import *
 router = DefaultRouter()
 
 router.register("task",TaskViewSet, basename='task')
+router.register("course", CourseEnrollViewSet)
 
 answer_router = NestedDefaultRouter(router, "task", lookup = "task")
 answer_router.register("answer", AnswerTaskViewSet, basename="task-answer")
 
 grade_router = NestedDefaultRouter(answer_router, "answer", lookup = "answer")
 grade_router.register("grade", GradeViewSet, basename="answer-grade" )
+
 
 urlpatterns = [
     

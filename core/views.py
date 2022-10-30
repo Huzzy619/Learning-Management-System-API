@@ -1,19 +1,26 @@
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.viewsets import ModelViewSet
 from dj_rest_auth.registration.views import RegisterView
-
+from rest_framework.viewsets import ModelViewSet
 
 from .models import *
-from .serializers import * 
+from .permissions import IsOwner
+from .serializers import *
 
 
 class MentorRegisterView(RegisterView):
+    """
+    Mentors Should register here to get some level of permission.
+
+    """
     serializer_class = MentorRegisterSerializer
 
 
 class ProfileViewSet (ModelViewSet):
-    # http_method_names = ['put','head','get','options','patch']
-    permission_classes = [IsAuthenticated]
+    """
+    Users can update their informations 
+
+    """
+    http_method_names = ['get','patch','options', 'head']
+    permission_classes = [IsOwner]
     serializer_class = ProfileSerializer
 
     def get_queryset(self):
@@ -24,7 +31,12 @@ class ProfileViewSet (ModelViewSet):
 
 
 class ImageViewSet (ModelViewSet):
+    """
+    upload and update profile picture
+
+    """
     queryset = Image.objects.filter()
+    permission_classes = [IsOwner]
 
     def get_queryset(self):
         return Image.objects.filter(user=self.request.user)
@@ -39,6 +51,14 @@ class ImageViewSet (ModelViewSet):
 
 
 class EmploymentViewSet (ModelViewSet):
+    """
+
+    Fill in to create or update employment details
+
+    """
+
+    http_method_names = ['get','post','patch','options', 'head']
+    permission_classes = [IsOwner]
     serializer_class = EmploymentSerializer
 
     def get_queryset(self):
@@ -49,6 +69,13 @@ class EmploymentViewSet (ModelViewSet):
 
 
 class EducationViewSet(ModelViewSet):
+
+    """
+    Provide or edit Educational endeavours
+
+    """
+    http_method_names = ['get','post','patch','options', 'head']
+    permission_classes = [IsOwner]
     serializer_class = EducationSerializer
 
     def get_queryset(self):
@@ -59,6 +86,12 @@ class EducationViewSet(ModelViewSet):
 
 
 class Tech_HistoryViewSet (ModelViewSet):
+    """
+    Have some experience in Tech? Tell us how much experience you've got
+
+    """
+    http_method_names = ['get','post','patch','options', 'head']
+    permission_classes = [IsOwner]
     serializer_class = TechSerializer
 
     def get_queryset(self):
@@ -69,6 +102,12 @@ class Tech_HistoryViewSet (ModelViewSet):
 
 
 class SocialViewSet (ModelViewSet):
+    """
+    Save and update Social Media Profiles 
+
+    """
+    http_method_names = ['get','post','patch','options', 'head']
+    permission_classes = [IsOwner]
     serializer_class = SocialSerializer
 
     def get_queryset(self):
@@ -79,7 +118,13 @@ class SocialViewSet (ModelViewSet):
 
 
 class InfoViewSet (ModelViewSet):
-    serializer_class = SocialSerializer
+    """
+    Additional Information of Users
+
+    """
+    http_method_names = ['get','post','patch','options', 'head']
+    permission_classes = [IsOwner]
+    serializer_class = InfoSerializer
 
     def get_queryset(self):
         return Info.objects.filter(user=self.request.user)
@@ -88,10 +133,4 @@ class InfoViewSet (ModelViewSet):
         return {'user': self.request.user}
 
 
-class CourseEnrollViewSet(ModelViewSet):
-    http_method_names = ['post', 'delete', 'get']
-    serializer_class = CourseEnrollSerializer
-    queryset = UserCourse.objects.all().select_related('course', 'user')
 
-    def get_serializer_context(self):
-        return {'user': self.request.user}

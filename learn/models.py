@@ -49,18 +49,8 @@ class AnswerTask (models.Model):
     answer = models.TextField()
     user = models.ForeignKey(User, on_delete = models.CASCADE)
 
-    @property
-    def total_grade(self):
-        try:
-            grades = self.grade.score
-            print(grades)
-        except:
-            grades = 'nothing'
-        
-        return grades
-
-        # total = sum([item.score for item in grades])
-        # pass
+    class Meta:
+        unique_together = [['user', 'task']]
 
 class Grade (models.Model):
     graded_by = models.ForeignKey(User, on_delete = models.DO_NOTHING )
@@ -70,7 +60,6 @@ class Grade (models.Model):
     regraded = models.BooleanField(default = False)
 
 
-    @property
-    def total_grade(self):
-        # AnswerTask.objects.
-        pass
+class UserCourse (models.Model):
+    course = models.ForeignKey(Course, on_delete = models.CASCADE)
+    user = models.ForeignKey(User, on_delete = models.CASCADE, related_name = 'usercourse')

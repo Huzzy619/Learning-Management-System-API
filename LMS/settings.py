@@ -42,6 +42,7 @@ INSTALLED_APPS = [
 
     'jazzmin',
     "hitcount", # Count number of views per post
+     'django_filters',
     
 
     'rest_framework',
@@ -220,7 +221,7 @@ REST_FRAMEWORK = {
     'COERCE_DECIMAL_TO_STRING': False,
 
     'DEFAULT_PERMISSION_CLASSES': [
-        # 'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.IsAuthenticated',
     ]
 
 }
@@ -259,3 +260,8 @@ CELERY_BEAT_SCHEDULE = {
     
     }
 }
+
+# EMAIL_BACKEND = "anymail.backends.sendinblue.EmailBackend"
+# ANYMAIL = {
+#     "SENDINBLUE_API_KEY": config('BLUE'),
+# }

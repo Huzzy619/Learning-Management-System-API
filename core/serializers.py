@@ -40,13 +40,6 @@ class ProfileSerializer (serializers.ModelSerializer):
         fields = ['id', 'email', 'first_name', 'last_name',
                   'middle_name', 'phone', 'gender']
 
-    # def save(self, **kwargs):
-
-    #     user_id = self.context['user_id']
-    #     instance = User.objects.update(id = user_id , **self.validated_data)
-    #     return instance
-
-
 class ImageSerializer (serializers.ModelSerializer):
     class Meta:
         model = Image
@@ -124,18 +117,3 @@ class InfoSerializer (serializers.ModelSerializer):
         return super().save(user=self.context['user'], **kwargs)
 
 
-class CourseEnrollSerializer(serializers.ModelSerializer):
-    user_name = serializers.SerializerMethodField(read_only = True)
-    course_title = serializers.SerializerMethodField()
-    class Meta:
-        model = UserCourse
-        fields = ["id","user_name","course", "course_title"]
-    
-    def get_user_name(self, obj):
-        return obj.user.get_full_name()
-    
-    def get_course_title(self, obj):
-        return obj.course.title
-
-    def save(self, **kwargs):
-        return super().save(user=self.context['user'], **kwargs)

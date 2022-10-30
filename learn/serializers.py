@@ -1,6 +1,8 @@
 from django.core.validators import URLValidator
 from django.utils import timezone
 from rest_framework import serializers
+from rest_framework.validators import UniqueTogetherValidator
+from django.db.utils import IntegrityError
 
 from .models import *
 
@@ -9,7 +11,6 @@ class TaskSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Task
-        # fields = '__all__'
         exclude = ['created_by']
 
     def save(self, **kwargs):
@@ -27,11 +28,11 @@ class GradeSerializer (serializers.ModelSerializer):
         exclude = ["answer", "graded_by"]
 
     def save(self, **kwargs):
-        # answer = AnswerTask.objects.get(pk = self.context['answer_pk'])
         return super().save(
             graded_by=self.context['request'].user,
             answer_id=self.context['answer_pk'],
-            **kwargs)
+            **kwargs
+        )
 
 
 class AnswerTaskSerializer(serializers.ModelSerializer):
@@ -47,6 +48,11 @@ class AnswerTaskSerializer(serializers.ModelSerializer):
         return obj.user.email
 
     def save(self, **kwargs):
+
+        user = self.context['user']
+
+        # check if task is expired
+
         task = Task.objects.get(pk=self.context['task_pk'])
         if timezone.now() >= task.submission_date:
             raise serializers.ValidationError("Task Expired")
@@ -65,8 +71,32 @@ class AnswerTaskSerializer(serializers.ModelSerializer):
             # checks if there is a link in the submission
             try:
                 validate = URLValidator(inverse_match=True)
+                validate(self.validated_data['answer'])
+
             except:
                 raise serializers.ValidationError(
                     "A plain text is expected not an url")
+        try:
 
-        return super().save(task=task, user=self.context['user'], **kwargs)
+            return super().save(task=task, user=user, **kwargs)
+
+        except IntegrityError:  # this is from the unique together constraint set in the model
+            raise serializers.ValidationError(
+                "You have already provided your answer to this task")
+
+
+class CourseEnrollSerializer(serializers.ModelSerializer):
+    user_name = serializers.SerializerMethodField(read_only = True)
+    course_title = serializers.SerializerMethodField()
+    class Meta:
+        model = UserCourse
+        fields = ["id","user_name","course", "course_title"]
+    
+    def get_user_name(self, obj):
+        return obj.user.get_full_name()
+    
+    def get_course_title(self, obj):
+        return obj.course.title
+
+    def save(self, **kwargs):
+        return super().save(user=self.context['user'], **kwargs)
