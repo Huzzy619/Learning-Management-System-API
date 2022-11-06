@@ -6,13 +6,13 @@ SECRET_KEY = os.environ.get('SECRET_KEY', SECRET_KEY)
 
 DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['learning-management-system-api-production.up.railway.app']
 
-CSRF_TRUSTED_ORIGINS = ['https://portfolio-production-6724.up.railway.app']
+CSRF_TRUSTED_ORIGINS = ['learning-management-system-api-production.up.railway.app']
 
-DATABASES = {
-    "default": dj_database_url.config()
-}
+# DATABASES = {
+#     "default": dj_database_url.config()
+# }
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 

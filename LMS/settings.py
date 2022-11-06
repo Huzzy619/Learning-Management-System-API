@@ -89,6 +89,7 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -249,7 +250,7 @@ REST_AUTH_SERIALIZERS = {
 }
 
 HITCOUNT_HITS_PER_IP_LIMIT = 1
-
+CORS_ALLOW_ALL_ORIGINS = True
 
 EMAIL_USER = ""
 EMAIL_PASSWORD = ""
