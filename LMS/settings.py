@@ -14,6 +14,9 @@ from pathlib import Path
 from datetime import timedelta
 # from celery.beat import crontab
 from decouple import config
+import os
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -64,6 +67,7 @@ INSTALLED_APPS = [
     # 'django_filters',
     'django_countries',
     "phonenumber_field",
+    # 'whitenoise',
 
     'cloudinary_storage',
     'cloudinary',
@@ -83,13 +87,14 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
 
 ]
 
@@ -195,6 +200,10 @@ STATICFILES_DIRS = [
 
     BASE_DIR / "static",
 ]
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
 
 MEDIA_URL = "media/"
 MEDIA_ROOT = BASE_DIR / 'media'

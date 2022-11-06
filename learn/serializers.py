@@ -1,16 +1,33 @@
+from urllib import request
 from django.core.validators import URLValidator
 from django.utils import timezone
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 from django.db.utils import IntegrityError
-
+from django.core.serializers import serialize
 from .models import *
 
 
+class ConceptSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Concept
+        fields = ['id', 'link', 'task']
+
+
+class ResourceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Resource
+        fields = ['id', 'link', 'task']
+
+
 class TaskSerializer(serializers.ModelSerializer):
+    # concept = ConceptSerializer(many = True, read_only = True )
+    concept = serializers.SerializerMethodField()
+    resources = serializers.SerializerMethodField()
 
     class Meta:
         model = Task
+
         exclude = ['created_by']
 
     def save(self, **kwargs):
@@ -21,6 +38,12 @@ class TaskSerializer(serializers.ModelSerializer):
 
         raise serializers.ValidationError("Only mentors can create tasks")
 
+    def get_concept(self, task):
+        return task.concepts.values()
+
+    def get_resources(self, task):
+        return task.resources.values()
+
 
 class GradeSerializer (serializers.ModelSerializer):
     class Meta:
@@ -28,11 +51,19 @@ class GradeSerializer (serializers.ModelSerializer):
         exclude = ["answer", "graded_by"]
 
     def save(self, **kwargs):
-        return super().save(
-            graded_by=self.context['request'].user,
+        request = self.context['request']
+
+        instance = super().save(
+            graded_by=request.user,
             answer_id=self.context['answer_pk'],
             **kwargs
         )
+        # If scores have been regraded or a new feedback given. Then we make regraded True
+        if request.method == 'PATCH':
+            instance.regraded = True
+            instance.save()
+
+        return instance
 
 
 class AnswerTaskSerializer(serializers.ModelSerializer):
@@ -86,15 +117,16 @@ class AnswerTaskSerializer(serializers.ModelSerializer):
 
 
 class CourseEnrollSerializer(serializers.ModelSerializer):
-    user_name = serializers.SerializerMethodField(read_only = True)
+    user_name = serializers.SerializerMethodField(read_only=True)
     course_title = serializers.SerializerMethodField()
+
     class Meta:
         model = UserCourse
-        fields = ["id","user_name","course", "course_title"]
-    
+        fields = ["id", "user_name", "course", "course_title"]
+
     def get_user_name(self, obj):
         return obj.user.get_full_name()
-    
+
     def get_course_title(self, obj):
         return obj.course.title
 

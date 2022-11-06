@@ -7,14 +7,19 @@ from django.core.mail import EmailMessage
 @receiver(post_save, sender=Task)
 def new_task(instance, created, **kwargs):
     if created:
-
-        send_email_for_new_task.delay(instance.id)
+        try:
+            send_email_for_new_task.delay(instance.id)
+        except:
+            pass
 
 
 @receiver(post_save, sender=Grade)
 def task_graded(instance, created, **kwargs):
     if created:
-        send_email_for_graded_task.delay(instance.id)
+        try:
+            send_email_for_graded_task.delay(instance.id)
+        except:
+            pass
 
 
 

@@ -38,7 +38,7 @@ class TaskViewSet (ModelViewSet):
     """
     pagination_class = TaskPaginator
     serializer_class = TaskSerializer
-    queryset = Task.objects.all()
+    queryset = Task.objects.all()#.prefetch_related('concepts')
 
     @action(detail=False)
     def me(self, request, **kwargs):
@@ -142,6 +142,11 @@ class AnswerTaskViewSet (ModelViewSet):
 
 
 class GradeViewSet (ModelViewSet):
+    """
+    Endpoints for Tasks to be graded.
+
+    """
+    http_method_names = ['get', 'post','patch','head', 'options']
     queryset = Grade.objects.all()
     serializer_class = GradeSerializer
 
@@ -161,3 +166,20 @@ class CourseEnrollViewSet(ModelViewSet):
 
     def get_serializer_context(self):
         return {'user': self.request.user}
+
+
+class ConceptViewSet (ModelViewSet):
+    """
+    The links to Concept pages to understand a task More.
+
+    """
+    serializer_class = ConceptSerializer
+    queryset = Concept.objects.all()
+
+class ResourceViewSet (ModelViewSet):
+    """
+    The links to Resource Materials for Tasks.
+
+    """
+    serializer_class = ResourceSerializer
+    queryset = Resource.objects.all()

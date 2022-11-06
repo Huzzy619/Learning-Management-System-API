@@ -7,6 +7,8 @@ router = DefaultRouter()
 
 router.register("task",TaskViewSet, basename='task')
 router.register("course", CourseEnrollViewSet)
+router.register("concept", ConceptViewSet)
+router.register("resource", ResourceViewSet)
 
 answer_router = NestedDefaultRouter(router, "task", lookup = "task")
 answer_router.register("answer", AnswerTaskViewSet, basename="task-answer")

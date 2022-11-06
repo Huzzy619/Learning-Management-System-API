@@ -63,3 +63,13 @@ class Grade (models.Model):
 class UserCourse (models.Model):
     course = models.ForeignKey(Course, on_delete = models.CASCADE)
     user = models.ForeignKey(User, on_delete = models.CASCADE, related_name = 'usercourse')
+
+
+class Concept (models.Model):
+    link = models.URLField()
+    task = models.ManyToManyField(Task, related_name = "concepts")
+
+
+class Resource (models.Model):
+    link= models.URLField()
+    task = models.ManyToManyField(Task, related_name = 'resources')
