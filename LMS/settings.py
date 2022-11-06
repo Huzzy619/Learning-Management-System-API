@@ -45,7 +45,6 @@ INSTALLED_APPS = [
 
     'jazzmin',
     "hitcount", # Count number of views per post
-     'django_filters',
     
 
     'rest_framework',
@@ -64,7 +63,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'debug_toolbar',
     'drf_yasg',
-    # 'django_filters',
+    'django_filters',
     'django_countries',
     "phonenumber_field",
     # 'whitenoise',
