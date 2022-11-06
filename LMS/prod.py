@@ -8,7 +8,7 @@ DEBUG = False
 
 ALLOWED_HOSTS = ['learning-management-system-api-production.up.railway.app']
 
-CSRF_TRUSTED_ORIGINS = ['learning-management-system-api-production.up.railway.app']
+CSRF_TRUSTED_ORIGINS = ['https://learning-management-system-api-production.up.railway.app']
 
 # DATABASES = {
 #     "default": dj_database_url.config()
