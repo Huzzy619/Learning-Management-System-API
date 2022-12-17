@@ -6,9 +6,9 @@ SECRET_KEY = os.environ.get('SECRET_KEY', SECRET_KEY)
 
 DEBUG = False
 
-ALLOWED_HOSTS = ['learning-management-system-api-production.up.railway.app']
+ALLOWED_HOSTS = ['lms.up.railway.app']
 
-CSRF_TRUSTED_ORIGINS = ['https://learning-management-system-api-production.up.railway.app']
+CSRF_TRUSTED_ORIGINS = ['https://lms.up.railway.app']
 
 # DATABASES = {
 #     "default": dj_database_url.config()
